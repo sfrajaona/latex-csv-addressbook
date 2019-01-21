@@ -1,0 +1,30 @@
+\documentclass[10pt,a4paper,twoside]{article} % 10pt font size, A4 paper and two-sided margins
+\usepackage[top=3.5cm,bottom=3.5cm,left=3.7cm,right=4.7cm,columnsep=30pt]{geometry} % Document margins and spacings
+
+\usepackage[utf8]{inputenc} % for international characters input
+\usepackage[T1]{fontenc} % font encoding for international characters output
+\usepackage{csvsimple} % To read the csv table 
+\usepackage{url} % To escape LaTeX special characters
+
+\usepackage{fancyhdr} % for modifying headers and footers
+\fancyhead[L]{\textsf{\rightmark}} % top left header
+\fancyhead[R]{\textsf{\leftmark}} % top right header
+\renewcommand{\headrulewidth}{1.4pt} % rule under the header
+\fancyfoot[C]{\textbf{\textsf{\thepage}}} % bottom center footer
+\renewcommand{\footrulewidth}{1.4pt} % rule under the footer
+\pagestyle{fancy} % custom headers and footers 
+
+%----------------------------------------------------------------------------------------
+\begin{document}
+\csvreader{persons.csv}{1=\name,2=\firstName,3=\address,4=\mobil,5=\tel,6=\email,7=\region}  
+{
+\edef\rawEmail{\email}  % because if we use \url{\email}, \email is not evaluated first
+\markboth{\name}{\name}  % set the content of the headings 
+\noindent{\bfseries\name, \firstName} \hfill\region\\
+\address  \hspace{0.3cm} \ifthenelse{\equal{\mobil}{ }}{}{Mobil: \mobil}\\
+\ifthenelse{\equal{\tel}{ }}{}{Tel: \tel} \hspace{0.3cm} 
+\ifthenelse{\equal{\email}{ }}{}{Mail: \expandafter\url\expandafter{\rawEmail}}
+
+\bigskip
+}
+\end{document}
